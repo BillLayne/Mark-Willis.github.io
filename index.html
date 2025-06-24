@@ -127,10 +127,16 @@
         .comparison-card__header.best-value { background-color: var(--best-value-bg); color: var(--best-value-text); }
         .comparison-card__header.best-value .best-value-badge { color: var(--best-value-text); border-color: var(--best-value-text); }
         .comparison-card__header img { height: 40px; margin-bottom: var(--space-sm); object-fit: contain;}
-        .price-display { font-size: var(--fs-xl); font-weight: 700; font-family: var(--font-body); }
-        .price-display sup { font-weight: 400; font-size: 0.5em; top: -1em; }
-        .price-display .term { font-size: var(--fs-sm); font-weight: 400; color: var(--mid-color); display: block;}
-        .best-value-badge { display: inline-block; margin-top: var(--space-md); padding: var(--space-xs) var(--space-sm); border: 1px solid var(--success-color); color: var(--success-color); border-radius: 20px; font-size: var(--fs-xs); font-weight: 600; }
+        
+        /* NEW STYLES for monthly price display */
+        .price-display .monthly-figure { font-size: var(--fs-xl); font-weight: 700; line-height: 1; }
+        .price-display sup { font-weight: 600; font-size: 0.5em; top: -1.2em; }
+        .price-display .monthly-term { font-size: var(--fs-md); font-weight: 500; display: block; margin-top: -5px;}
+        .total-premium-term { font-size: var(--fs-sm); color: var(--mid-color); margin-top: var(--space-xs); }
+        .best-value .total-premium-term { color: var(--best-value-text); opacity: 0.8;}
+
+        .best-value-badge { display: inline-block; margin-top: var(--space-lg); padding: var(--space-xs) var(--space-sm); border: 1px solid var(--success-color); color: var(--success-color); border-radius: 20px; font-size: var(--fs-xs); font-weight: 600; }
+        
         .comparison-card__body { padding: var(--space-lg); flex-grow: 1;}
         .coverage-list { list-style: none; }
         .coverage-item { display: flex; justify-content: space-between; align-items: center; padding: var(--space-sm) 0; border-bottom: 1px solid var(--light-color); }
@@ -199,7 +205,7 @@
         /* [RESPONSIVE DESIGN] */
         @media (min-width: 768px) {
             .comparison-table { 
-                display: block !important; /* Overrides mobile-specific 'none' */
+                display: block !important;
                 margin-top: 0;
             }
             .comparison-grid { 
@@ -242,7 +248,7 @@
                         After a thorough market analysis, your <strong>Progressive renewal offers the best combination of price and coverage.</strong> Your loyalty and safe driving history have earned you a highly competitive rate that other carriers couldn't match at this time.
                     </p>
                     <p class="price-comparison">
-                        Your renewal at <strong>$1,529.83</strong> is approximately <strong>$118 less</strong> than the next best offer. For complete transparency, I've detailed all the quotes below, including itemized breakdowns, so you can review the numbers yourself.
+                        Your renewal at <strong>$255/month</strong> saves you nearly <strong>$20/month</strong> compared to the next best offer. For complete transparency, I've detailed all the quotes below so you can review the numbers yourself.
                     </p>
                 </div>
             </div>
@@ -265,7 +271,11 @@
                             <div class="comparison-card">
                                 <div class="comparison-card__header best-value">
                                     <img src="https://i.imgur.com/7N1vfo0.png" alt="Progressive Logo">
-                                    <div class="price-display">$1,529<sup>.83</sup><span class="term">for 6 months</span></div>
+                                    <div class="price-display">
+                                        <span class="monthly-figure">$254<sup>.97</sup></span>
+                                        <span class="monthly-term">per month</span>
+                                    </div>
+                                    <div class="total-premium-term">($1,529.83 total premium)</div>
                                     <span class="best-value-badge">★ Your Best Value</span>
                                 </div>
                                 <div class="comparison-card__body">
@@ -287,7 +297,11 @@
                             <div class="comparison-card">
                                 <div class="comparison-card__header">
                                     <img src="https://i.imgur.com/HF8oPAF.png" alt="National General Logo">
-                                    <div class="price-display">$1,648<sup>.39</sup><span class="term">for 6 months</span></div>
+                                    <div class="price-display">
+                                        <span class="monthly-figure">$274<sup>.73</sup></span>
+                                        <span class="monthly-term">per month</span>
+                                    </div>
+                                    <div class="total-premium-term">($1,648.39 total premium)</div>
                                 </div>
                                 <div class="comparison-card__body">
                                      <ul class="coverage-list">
@@ -308,7 +322,11 @@
                            <div class="comparison-card">
                                 <div class="comparison-card__header">
                                     <img src="https://i.imgur.com/Mv5V7tV.png" alt="Nationwide Logo">
-                                    <div class="price-display">$1,938<sup>.07</sup><span class="term">for 6 months</span></div>
+                                     <div class="price-display">
+                                        <span class="monthly-figure">$323<sup>.01</sup></span>
+                                        <span class="monthly-term">per month</span>
+                                    </div>
+                                    <div class="total-premium-term">($1,938.07 total premium)</div>
                                 </div>
                                 <div class="comparison-card__body">
                                      <ul class="coverage-list">
@@ -329,7 +347,11 @@
                             <div class="comparison-card">
                                 <div class="comparison-card__header">
                                     <img src="https://i.imgur.com/m6wsO1p.png" alt="Travelers Logo">
-                                    <div class="price-display">$2,021<sup>.39</sup><span class="term">for 6 months</span></div>
+                                     <div class="price-display">
+                                        <span class="monthly-figure">$336<sup>.90</sup></span>
+                                        <span class="monthly-term">per month</span>
+                                    </div>
+                                    <div class="total-premium-term">($2,021.39 total premium)</div>
                                 </div>
                                 <div class="comparison-card__body">
                                      <ul class="coverage-list">
@@ -390,7 +412,7 @@
         </div>
     </footer>
 
-    <!-- MODALS SECTION (FULL CONTENT INCLUDED) -->
+    <!-- MODALS SECTION -->
     <div id="modals">
         <div class="modal" id="modal-progressive">
             <div class="modal-overlay" data-modal-close></div>
