@@ -114,14 +114,14 @@
 
         /* [COMPARISON SECTION] */
         .comparison-container { margin-top: var(--space-xl); }
-        #premium-chart { max-height: 400px; margin-bottom: var(--space-xl); }
-        .company-tabs { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-bottom: var(--space-lg); }
-        .company-tabs::-webkit-scrollbar { display: none; }
-        .tab { padding: var(--space-sm) var(--space-md); cursor: pointer; border-bottom: 3px solid transparent; font-size: var(--fs-sm); font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: var(--space-sm); transition: var(--transition); }
-        .tab img { height: 24px; object-fit: contain; }
-        .tab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
-        .comparison-table { display: none; }
+        #premium-chart-container { position: relative; max-height: 400px; margin-bottom: var(--space-xl); }
+        #premium-chart { cursor: pointer; }
+
+        /* Mobile-first approach for comparison cards */
+        .comparison-table { display: none; margin-top: var(--space-lg); animation: fadeInCard 0.5s ease-out; }
+        @keyframes fadeInCard { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .comparison-table.active { display: block; }
+        
         .comparison-card { background: var(--white-color); border-radius: var(--border-radius); box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--border-color); display: flex; flex-direction: column; height: 100%;}
         .comparison-card__header { padding: var(--space-lg); border-bottom: 1px solid var(--border-color); text-align: center; }
         .comparison-card__header.best-value { background-color: var(--best-value-bg); color: var(--best-value-text); }
@@ -146,7 +146,6 @@
         .coverage-value .icon.check { color: var(--success-color); }
         .coverage-value .icon.cross { color: var(--accent-color); }
         .coverage-value .icon.warning { color: var(--warning-color); }
-
         .card-footer { padding: 0 var(--space-lg) var(--space-lg); text-align: center; }
         .btn-details { background: none; border: 1px solid var(--border-color); color: var(--mid-color); padding: var(--space-sm) var(--space-md); border-radius: 8px; font-weight: 600; cursor: pointer; transition: var(--transition); width: 100%; }
         .btn-details:hover { background-color: var(--light-color); border-color: var(--mid-color); color: var(--dark-color); }
@@ -199,15 +198,20 @@
 
         /* [RESPONSIVE DESIGN] */
         @media (min-width: 768px) {
-            .company-tabs { display: none; }
-            .comparison-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-lg); }
-            .comparison-table { display: block; width: 100%; }
+            .comparison-table { 
+                display: block; 
+                margin-top: 0;
+            }
+            .comparison-grid { 
+                display: grid; 
+                grid-template-columns: repeat(4, 1fr); 
+                gap: var(--space-lg); 
+            }
         }
     </style>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
 
-    <!-- Skip Navigation Link -->
     <a href="#main-content" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to main content</a>
 
     <header class="hero" role="banner">
@@ -219,7 +223,7 @@
                 <div class="logo-placeholder">BL</div>
                 <div class="agent-info">
                     <h3>Bill Layne Insurance Agency</h3>
-                    <p>Your Local Agent &amp; Insurance Advisor</p>
+                    <p>Your Local Agent & Insurance Advisor</p>
                 </div>
             </div>
         </div>
@@ -248,22 +252,15 @@
             <div class="container">
                 <div class="section-header fade-in">
                     <h2>Quote Comparison At-a-Glance</h2>
-                    <p>Here's how the 6-month premiums stack up. All quotes have been matched to your current liability limits for an accurate, apples-to-apples comparison.</p>
+                    <p>Here's how the 6-month premiums stack up. All quotes have been matched to your current liability limits. **On mobile, tap a bar on the chart to see details.**</p>
                 </div>
                 
                 <div class="comparison-container fade-in">
-                    <canvas id="premium-chart" role="img" aria-label="A bar chart comparing 6-month premiums from four insurance carriers. Progressive is lowest at $1,529.83."></canvas>
-
-                    <div class="company-tabs">
-                        <div class="tab active" data-company="progressive"><img src="https://i.imgur.com/7N1vfo0.png" alt="Progressive Logo">Progressive</div>
-                        <div class="tab" data-company="nationalgeneral"><img src="https://i.imgur.com/HF8oPAF.png" alt="National General Logo">National General</div>
-                        <div class="tab" data-company="nationwide"><img src="https://i.imgur.com/pYIihf4.png" alt="Nationwide Logo">Nationwide</div>
-                        <div class="tab" data-company="travelers"><img src="https://i.imgur.com/m6wsO1p.png" alt="Travelers Logo">Travelers</div>
+                    <div id="premium-chart-container">
+                         <canvas id="premium-chart" role="img" aria-label="An interactive bar chart comparing 6-month premiums. Tap a bar to view details below."></canvas>
                     </div>
-                    
+
                     <div class="comparison-grid">
-                        
-                        <!-- PROGRESSIVE (RENEWAL) -->
                         <div class="comparison-table active" id="table-progressive">
                             <div class="comparison-card">
                                 <div class="comparison-card__header best-value">
@@ -282,12 +279,10 @@
                                     </ul>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn-details" data-modal-target="#modal-progressive">View Details</button>
+                                    <button class="btn-details" data-modal-target="#modal-progressive">View Itemized Details</button>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- NATIONAL GENERAL -->
                         <div class="comparison-table" id="table-nationalgeneral">
                             <div class="comparison-card">
                                 <div class="comparison-card__header">
@@ -305,12 +300,10 @@
                                     </ul>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn-details" data-modal-target="#modal-nationalgeneral">View Details</button>
+                                    <button class="btn-details" data-modal-target="#modal-nationalgeneral">View Itemized Details</button>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- NATIONWIDE -->
                         <div class="comparison-table" id="table-nationwide">
                            <div class="comparison-card">
                                 <div class="comparison-card__header">
@@ -328,12 +321,10 @@
                                     </ul>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn-details" data-modal-target="#modal-nationwide">View Details</button>
+                                    <button class="btn-details" data-modal-target="#modal-nationwide">View Itemized Details</button>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- TRAVELERS -->
                         <div class="comparison-table" id="table-travelers">
                             <div class="comparison-card">
                                 <div class="comparison-card__header">
@@ -351,7 +342,7 @@
                                     </ul>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn-details" data-modal-target="#modal-travelers">View Details</button>
+                                    <button class="btn-details" data-modal-target="#modal-travelers">View Itemized Details</button>
                                 </div>
                             </div>
                         </div>
@@ -360,7 +351,6 @@
             </div>
         </section>
 
-        <!-- Other sections -->
         <section class="agent-value-section">
             <div class="container">
                 <div class="section-header fade-in">
@@ -374,6 +364,7 @@
                 </div>
             </div>
         </section>
+        
         <section class="cta-section">
             <div class="container">
                 <div class="section-header fade-in">
@@ -405,12 +396,11 @@
         <div class="modal" id="modal-progressive">
             <div class="modal-overlay" data-modal-close></div>
             <div class="modal-content">
-                <button class="modal-close" data-modal-close aria-label="Close modal">&times;</button>
+                <button class="modal-close" data-modal-close aria-label="Close modal">×</button>
                 <div class="modal-header">
-                    <img src="https://i.imgur.com/KPaWgwa.png" alt="Progressive Logo">
+                    <img src="https://i.imgur.com/7N1vfo0.png" alt="Progressive Logo">
                     <h2>Progressive Details</h2>
                 </div>
-                <!-- ... Modal Table content ... -->
                  <p>Below is the premium breakdown by vehicle and policy-level coverage for the 6-month term.</p>
                 <table class="details-table"><thead><tr class="vehicle-header"><td colspan="2">2018 Nissan Altima</td></tr></thead><tbody><tr><td>Liability Coverage</td><td>$201.00</td></tr><tr><td>Other Than Collision ($500 Ded)</td><td>$122.00</td></tr><tr><td>Collision ($500 Ded)</td><td>$264.00</td></tr><tr><td>Towing & Labor</td><td>$6.00</td></tr><tr class="subtotal-row"><td>Vehicle Subtotal</td><td>$593.00</td></tr></tbody></table>
                 <table class="details-table"><thead><tr class="vehicle-header"><td colspan="2">2010 Nissan Frontier</td></tr></thead><tbody><tr><td>Liability Coverage</td><td>$185.00</td></tr><tr><td>Other Than Collision ($500 Ded)</td><td>$64.00</td></tr><tr><td>Collision ($500 Ded)</td><td>$142.00</td></tr><tr><td>Towing & Labor</td><td>$6.00</td></tr><tr class="subtotal-row"><td>Vehicle Subtotal</td><td>$397.00</td></tr></tbody></table>
@@ -423,9 +413,9 @@
         <div class="modal" id="modal-nationalgeneral">
             <div class="modal-overlay" data-modal-close></div>
             <div class="modal-content">
-                 <button class="modal-close" data-modal-close aria-label="Close modal">&times;</button>
+                 <button class="modal-close" data-modal-close aria-label="Close modal">×</button>
                 <div class="modal-header">
-                    <img src="https://i.imgur.com/sMxtg8R.png" alt="National General Logo">
+                    <img src="https://i.imgur.com/HF8oPAF.png" alt="National General Logo">
                     <h2>National General Details</h2>
                 </div>
                  <p>Below is the premium breakdown by vehicle for the 6-month term.</p>
@@ -440,9 +430,9 @@
         <div class="modal" id="modal-nationwide">
             <div class="modal-overlay" data-modal-close></div>
             <div class="modal-content">
-                <button class="modal-close" data-modal-close aria-label="Close modal">&times;</button>
+                <button class="modal-close" data-modal-close aria-label="Close modal">×</button>
                 <div class="modal-header">
-                    <img src="https://i.imgur.com/pYIihf4.png" alt="Nationwide Logo">
+                    <img src="https://i.imgur.com/Mv5V7tV.png" alt="Nationwide Logo">
                     <h2>Nationwide Details</h2>
                 </div>
                 <p>The Nationwide quote document does not provide an itemized premium breakdown per coverage. The total premium of <strong>$1,938.07</strong> is for the following coverages across all three vehicles.</p>
@@ -455,7 +445,7 @@
         <div class="modal" id="modal-travelers">
             <div class="modal-overlay" data-modal-close></div>
             <div class="modal-content">
-                <button class="modal-close" data-modal-close aria-label="Close modal">&times;</button>
+                <button class="modal-close" data-modal-close aria-label="Close modal">×</button>
                 <div class="modal-header">
                     <img src="https://i.imgur.com/m6wsO1p.png" alt="Travelers Logo">
                     <h2>Travelers Details</h2>
@@ -471,65 +461,109 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- PREVIOUS JS CODE ---
-        // (Personalization, scroll animations, chart, and mobile tabs remain the same)
+        // --- 1. Personalization ---
         const clientName = "Mark";
         document.getElementById('client-name').textContent = clientName;
         const greetingEl = document.getElementById('greeting');
         const hour = new Date().getHours();
         greetingEl.textContent = `${hour<12?"Good morning":hour<18?"Good afternoon":"Good evening"}, ${clientName}. Here is your review.`;
+
+        // --- 2. Scroll-triggered Animations ---
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('is-visible'));
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-        const tabs = document.querySelectorAll('.tab'), tables = document.querySelectorAll('.comparison-table');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetCompany = tab.dataset.company;
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                tables.forEach(table => table.id === `table-${targetCompany}` ? table.classList.add('active') : table.classList.remove('active'));
-            });
-        });
-        const ctx = document.getElementById('premium-chart').getContext('2d');
-        new Chart(ctx, { type: 'bar', data: { labels: ['Progressive', 'National General', 'Nationwide', 'Travelers'], datasets: [{ label: '6-Month Premium ($)', data: [1529.83, 1648.39, 1938.07, 2021.39], backgroundColor: ['hsla(160, 64%, 95%, 1)', 'hsla(220, 14%, 96%, 1)', 'hsla(220, 14%, 96%, 1)', 'hsla(220, 14%, 96%, 1)'], borderColor: ['hsla(158, 49%, 43%, 1)', 'hsla(216, 12%, 84%, 1)', 'hsla(216, 12%, 84%, 1)', 'hsla(216, 12%, 84%, 1)'], borderWidth: 2, borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `Premium: $${c.formattedValue}` } } }, scales: { y: { beginAtZero: false, min: 1400, ticks: { callback: v => '$' + v.toLocaleString() } }, x: { grid: { display: false } } } } });
 
-        // --- NEW MODAL LOGIC ---
+        // --- 3. Interactive Quote Chart & Card Switching ---
+        const ctx = document.getElementById('premium-chart').getContext('2d');
+        const companyNames = ['progressive', 'nationalgeneral', 'nationwide', 'travelers'];
+        
+        const barColors = {
+            background: [
+                'rgba(75, 192, 192, 0.4)',  // Progressive (Green tint)
+                'rgba(54, 162, 235, 0.4)',  // National General (Blue tint)
+                'rgba(255, 206, 86, 0.4)',  // Nationwide (Yellow tint)
+                'rgba(255, 99, 132, 0.4)'   // Travelers (Red tint)
+            ],
+            border: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(255, 99, 132, 1)'
+            ]
+        };
+
+        function switchActiveCard(companyName) {
+            const tables = document.querySelectorAll('.comparison-table');
+            // This function runs on mobile to show only the selected card
+            if (window.innerWidth < 768) {
+                let cardToShow = document.getElementById(`table-${companyName}`);
+                if (!cardToShow) cardToShow = tables[0]; // Fallback to the first one
+
+                tables.forEach(table => {
+                    table.classList.remove('active');
+                });
+                cardToShow.classList.add('active');
+            }
+        }
+        
+        // Initial state on mobile: Show the first card (Progressive)
+        switchActiveCard(companyNames[0]);
+        
+        const premiumChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Progressive', 'National General', 'Nationwide', 'Travelers'],
+                datasets: [{
+                    label: '6-Month Premium ($)',
+                    data: [1529.83, 1648.39, 1938.07, 2021.39],
+                    backgroundColor: barColors.background,
+                    borderColor: barColors.border,
+                    borderWidth: 2,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                onClick: (e) => {
+                    const activePoints = premiumChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
+                    if (activePoints.length > 0 && window.innerWidth < 768) {
+                        const dataIndex = activePoints[0].index;
+                        const companyName = companyNames[dataIndex];
+                        switchActiveCard(companyName);
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: { label: c => `Premium: $${c.formattedValue}` }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: false, min: 1400, ticks: { callback: v => '$' + v.toLocaleString() } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+        
+        // --- 4. Modal Logic ---
         const openModalButtons = document.querySelectorAll('[data-modal-target]');
         const closeModalButtons = document.querySelectorAll('[data-modal-close]');
-
         openModalButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const modal = document.querySelector(button.dataset.modalTarget);
-                openModal(modal);
-            });
+            button.addEventListener('click', () => { openModal(document.querySelector(button.dataset.modalTarget)); });
         });
-
         closeModalButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const modal = button.closest('.modal');
-                closeModal(modal);
-            });
+            button.addEventListener('click', () => { closeModal(button.closest('.modal')); });
         });
-
         function openModal(modal) {
-            if (modal == null) return;
-            modal.classList.add('is-active');
-            document.body.classList.add('modal-open');
+            if (modal) { modal.classList.add('is-active'); document.body.classList.add('modal-open'); }
         }
-
         function closeModal(modal) {
-            if (modal == null) return;
-            modal.classList.remove('is-active');
-            document.body.classList.remove('modal-open');
+            if (modal) { modal.classList.remove('is-active'); document.body.classList.remove('modal-open'); }
         }
-
-        // Close modal with escape key
         window.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-                const activeModal = document.querySelector('.modal.is-active');
-                closeModal(activeModal);
-            }
+            if (e.key === 'Escape') closeModal(document.querySelector('.modal.is-active'));
         });
     });
     </script>
