@@ -199,7 +199,7 @@
         /* [RESPONSIVE DESIGN] */
         @media (min-width: 768px) {
             .comparison-table { 
-                display: block; 
+                display: block !important; /* Overrides mobile-specific 'none' */
                 margin-top: 0;
             }
             .comparison-grid { 
@@ -390,9 +390,8 @@
         </div>
     </footer>
 
-    <!-- MODALS SECTION -->
+    <!-- MODALS SECTION (FULL CONTENT INCLUDED) -->
     <div id="modals">
-        <!-- Progressive Modal -->
         <div class="modal" id="modal-progressive">
             <div class="modal-overlay" data-modal-close></div>
             <div class="modal-content">
@@ -409,7 +408,6 @@
             </div>
         </div>
 
-        <!-- National General Modal -->
         <div class="modal" id="modal-nationalgeneral">
             <div class="modal-overlay" data-modal-close></div>
             <div class="modal-content">
@@ -426,7 +424,6 @@
             </div>
         </div>
         
-        <!-- Nationwide Modal -->
         <div class="modal" id="modal-nationwide">
             <div class="modal-overlay" data-modal-close></div>
             <div class="modal-content">
@@ -441,7 +438,6 @@
             </div>
         </div>
 
-        <!-- Travelers Modal -->
         <div class="modal" id="modal-travelers">
             <div class="modal-overlay" data-modal-close></div>
             <div class="modal-content">
@@ -494,9 +490,9 @@
         };
 
         function switchActiveCard(companyName) {
-            const tables = document.querySelectorAll('.comparison-table');
-            // This function runs on mobile to show only the selected card
+            // This function ONLY affects mobile view by swapping the '.active' class
             if (window.innerWidth < 768) {
+                const tables = document.querySelectorAll('.comparison-table');
                 let cardToShow = document.getElementById(`table-${companyName}`);
                 if (!cardToShow) cardToShow = tables[0]; // Fallback to the first one
 
@@ -507,7 +503,7 @@
             }
         }
         
-        // Initial state on mobile: Show the first card (Progressive)
+        // On load, make the first card active for mobile view
         switchActiveCard(companyNames[0]);
         
         const premiumChart = new Chart(ctx, {
@@ -528,6 +524,7 @@
                 maintainAspectRatio: false,
                 onClick: (e) => {
                     const activePoints = premiumChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
+                    // Only run the card-switching logic on mobile
                     if (activePoints.length > 0 && window.innerWidth < 768) {
                         const dataIndex = activePoints[0].index;
                         const companyName = companyNames[dataIndex];
